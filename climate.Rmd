@@ -99,3 +99,24 @@ coldest_plot <- ggplot(SF_coldest, aes(x = YEARMONTH, y = TMIN))+
 coldest_plot
 
 ```
+
+```{r}
+# sea level rise trends
+
+searise = read_csv("sf_searise.csv")
+
+searise_msl = searise %>% 
+  select(Year, Month, Monthly_MSL) %>% 
+  filter(Monthly_MSL != "NA")
+
+searise_plot = ggplot(searise_msl, aes(x = Year, y = Monthly_MSL)) +
+  geom_line()
+
+searise_plot
+
+
+```
+
+
+
+
