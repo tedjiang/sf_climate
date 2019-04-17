@@ -24,7 +24,7 @@ SF_Climate <- SF_Climate_raw %>%
   mutate(DATE_new = ymd(DATE)) %>% 
   mutate(YEAR = year(DATE_new)) %>% 
   mutate(MONTH = month(DATE_new)) %>% 
-  mutate(YEARMONTH = floor_date(DATE_new, "month"))
+  mutate(YEARMONTH = floor_date(DATE_new, "year"))
 
 ```
 
@@ -58,12 +58,12 @@ prcp_plot
 ```{r}
 
 SF_over90_raw <- SF_Climate %>% 
-  select(YEARMONTH, TMAX) %>%
-  filter(TMAX >= 85)
+  select(YEARMONTH, TMIN) %>%
+  filter(TMIN <= 32)
 
-SF_over90 <- aggregate(TMAX ~ YEARMONTH, data = SF_over90_raw, length)
+SF_over90 <- aggregate(TMIN ~ YEARMONTH, data = SF_over90_raw, length)
 
-over90_plot <- ggplot(SF_over90, aes(x = YEARMONTH, y = TMAX))+
+over90_plot <- ggplot(SF_over90, aes(x = YEARMONTH, y = TMIN))+
   geom_point()
 
 over90_plot
