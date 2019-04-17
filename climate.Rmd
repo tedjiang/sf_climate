@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(lubridate)
+library(ggthemes)
 
 ```
 
@@ -110,8 +111,11 @@ searise_msl = searise %>%
   filter(Monthly_MSL != "NA")
 
 searise_plot = ggplot(searise_msl, aes(x = Year, y = Monthly_MSL)) +
-  geom_line() +
-  theme_classic()
+  geom_line(color = "blue") +
+  xlab("Year") +
+  ylab("Sea level rise (mm)") +
+  ggtitle("Monthly Sea Level Rise in San Francisco") + 
+  theme_stata()
 
 searise_plot
 
