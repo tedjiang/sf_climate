@@ -59,7 +59,7 @@ prcp_plot
 
 SF_over90_raw <- SF_Climate %>% 
   select(YEARMONTH, TMAX) %>%
-  filter(TMAX >= 80)
+  filter(TMAX >= 85)
 
 SF_over90 <- aggregate(TMAX ~ YEARMONTH, data = SF_over90_raw, length)
 
