@@ -57,22 +57,45 @@ prcp_plot
 
 ```{r}
 
-SF_over90_raw <- SF_Climate %>% 
+SF_under32_raw <- SF_Climate %>% 
   select(YEARMONTH, TMIN) %>%
   filter(TMIN <= 32)
 
-SF_over90 <- aggregate(TMIN ~ YEARMONTH, data = SF_over90_raw, length)
+SF_under32 <- aggregate(TMIN ~ YEARMONTH, data = SF_under32_raw, length)
 
-over90_plot <- ggplot(SF_over90, aes(x = YEARMONTH, y = TMIN))+
+under32_plot <- ggplot(SF_under32, aes(x = YEARMONTH, y = TMIN))+
   geom_point()
 
-over90_plot
+under32_plot
 
 ```
 
 ```{r}
 
+SF_hottest_raw <- SF_Climate %>% 
+  filter(YEAR <= 2018) %>% 
+  select(YEARMONTH, TMAX)
 
+SF_hottest <- aggregate(TMAX ~ YEARMONTH, data = SF_hottest_raw, max)
+
+hottest_plot <- ggplot(SF_hottest, aes(x = YEARMONTH, y = TMAX))+
+  geom_point()
+
+hottest_plot
 
 ```
 
+```{r}
+
+SF_coldest_raw <- SF_Climate %>% 
+  filter(YEAR <= 2018) %>% 
+  select(YEARMONTH, TMIN)
+
+SF_coldest <- aggregate(TMIN ~ YEARMONTH, data = SF_coldest_raw, min)
+
+coldest_plot <- ggplot(SF_coldest, aes(x = YEARMONTH, y = TMIN))+
+  geom_point()
+
+coldest_plot
+
+```
