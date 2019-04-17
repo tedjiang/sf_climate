@@ -110,7 +110,8 @@ searise_msl = searise %>%
   filter(Monthly_MSL != "NA")
 
 searise_plot = ggplot(searise_msl, aes(x = Year, y = Monthly_MSL)) +
-  geom_line()
+  geom_line() +
+  theme_classic()
 
 searise_plot
 
