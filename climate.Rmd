@@ -1,0 +1,78 @@
+---
+title: "SF_climate"
+author: "Yingfei Jiang"
+date: "4/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(lubridate)
+
+```
+
+```{r}
+
+SF_Climate_raw <- read_csv("SF Climate.csv")
+
+SF_Climate <- SF_Climate_raw %>% 
+  mutate(DATE_new = ymd(DATE)) %>% 
+  mutate(YEAR = year(DATE_new)) %>% 
+  mutate(MONTH = month(DATE_new)) %>% 
+  mutate(YEARMONTH = floor_date(DATE_new, "month"))
+
+```
+
+```{r}
+
+Tmax_plot <- ggplot(SF_Climate, aes(x = DATE_new, y = TMAX))+
+  geom_line()
+
+Tmax_plot
+
+```
+
+```{r}
+
+Tmin_plot <- ggplot(SF_Climate, aes(x = DATE_new, y = TMIN))+
+  geom_line()
+
+Tmin_plot
+
+```
+
+```{r}
+
+prcp_plot <- ggplot(SF_Climate, aes(x = DATE_new, y = PRCP))+
+  geom_line()
+
+prcp_plot
+
+```
+
+```{r}
+
+SF_over90_raw <- SF_Climate %>% 
+  select(YEARMONTH, TMAX) %>%
+  filter(TMAX >= 80)
+
+SF_over90 <- aggregate(TMAX ~ YEARMONTH, data = SF_over90_raw, length)
+
+over90_plot <- ggplot(SF_over90, aes(x = YEARMONTH, y = TMAX))+
+  geom_point()
+
+over90_plot
+
+```
+
+```{r}
+
+
+
+```
+
