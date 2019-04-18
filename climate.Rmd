@@ -223,4 +223,30 @@ searise_ttest
 
 ```
 
+```{r}
+
+SF_prcp <- SF_Climate %>% 
+  select(PRCP, YEAR) %>% 
+  filter(YEAR<=2018) %>% 
+  mutate(PRCP = if_else(is.na(PRCP), 0, PRCP)) %>% 
+  group_by(YEAR) %>% 
+  summarise(prcp = mean(PRCP)) 
+
+prcp_plot <- ggplot(SF_prcp, aes(x = YEAR, y = prcp))+
+  geom_line(color = "dark green")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Precipitation (inches)")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(0, 0.125, 0.025), limits = c(0, 0.125))+
+  stat_smooth(method = "lm", col = "orange")
+
+prcp_plot
+
+ggsave("prcp.png")
+
+res_prcp=lm(prcp~YEAR, data=SF_prcp)
+summary(res_prcp)
+
+```
 
