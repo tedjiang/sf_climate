@@ -59,13 +59,20 @@ prcp_plot
 ```{r}
 
 SF_under32_raw <- SF_Climate %>% 
+  filter(YEAR <= 2018) %>% 
   select(YEARMONTH, TMIN) %>%
+  mutate(YEAR = year(YEARMONTH)) %>% 
   filter(TMIN <= 32)
 
-SF_under32 <- aggregate(TMIN ~ YEARMONTH, data = SF_under32_raw, length)
+SF_under32 <- aggregate(TMIN ~ YEAR, data = SF_under32_raw, length)
 
-under32_plot <- ggplot(SF_under32, aes(x = YEARMONTH, y = TMIN))+
-  geom_point()
+under32_plot <- ggplot(SF_under32, aes(x = YEAR, y = TMIN))+
+  geom_point(color = "dark blue")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Frost Days")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(0, 20, 5), limits = c(0, 20))
 
 under32_plot
 
@@ -73,31 +80,109 @@ under32_plot
 
 ```{r}
 
-SF_hottest_raw <- SF_Climate %>% 
+SF_TN10P_raw <- SF_Climate %>% 
   filter(YEAR <= 2018) %>% 
-  select(YEARMONTH, TMAX)
+  select(YEARMONTH, TMIN) %>%
+  mutate(YEAR = year(YEARMONTH)) %>% 
+  filter(TMIN <= 41)
 
-SF_hottest <- aggregate(TMAX ~ YEARMONTH, data = SF_hottest_raw, max)
+SF_TN10P <- aggregate(TMIN ~ YEAR, data = SF_TN10P_raw, length)
 
-hottest_plot <- ggplot(SF_hottest, aes(x = YEARMONTH, y = TMAX))+
-  geom_point()
+TN10P_plot <- ggplot(SF_TN10P, aes(x = YEAR, y = TMIN))+
+  geom_point(color = "blue")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Cold Nights")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(0, 100, 25), limits = c(0, 100))+
+  stat_smooth(method = "lm", col = "blue")
 
-hottest_plot
+TN10P_plot
+
+ggsave("TN10P.png")
+
+res_TN10P=lm(TMIN~YEAR, data=SF_TN10P)
+summary(res_TN10P)
 
 ```
 
 ```{r}
 
-SF_coldest_raw <- SF_Climate %>% 
+SF_TX90P_raw <- SF_Climate %>% 
   filter(YEAR <= 2018) %>% 
-  select(YEARMONTH, TMIN)
+  select(YEARMONTH, TMAX) %>%
+  mutate(YEAR = year(YEARMONTH)) %>% 
+  filter(TMAX >= 76)
 
-SF_coldest <- aggregate(TMIN ~ YEARMONTH, data = SF_coldest_raw, min)
+SF_TX90P <- aggregate(TMAX ~ YEAR, data = SF_TX90P_raw, length)
 
-coldest_plot <- ggplot(SF_coldest, aes(x = YEARMONTH, y = TMIN))+
-  geom_point()
+TX90P_plot <- ggplot(SF_TX90P, aes(x = YEAR, y = TMAX))+
+  geom_point(color = "red")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Warm Days")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(0, 100, 25), limits = c(0, 100))+
+  stat_smooth(method = "lm", col = "red")
 
-coldest_plot
+TX90P_plot
+
+ggsave("TX90P.png")
+
+res_TX90P=lm(TMAX~YEAR, data=SF_TX90P)
+summary(res_TX90P)
+
+```
+
+```{r}
+
+SF_TXx_raw <- SF_Climate %>% 
+  filter(YEAR <= 2018) %>% 
+  select(YEARMONTH, TMAX) %>% 
+  mutate(YEAR = year(YEARMONTH))
+
+SF_TXx <- aggregate(TMAX ~ YEAR, data = SF_TXx_raw, max)
+
+TXx_plot <- ggplot(SF_TXx, aes(x = YEAR, y = TMAX))+
+  geom_point(color = "red")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Temperature (F)")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(85, 110, 5), limits = c(85, 110))+
+  stat_smooth(method = "lm", col = "red")
+
+TXx_plot
+ggsave("TXx.png")
+
+res_TXx=lm(TMAX~YEAR, data=SF_TXx)
+summary(res_TXx)
+
+```
+
+```{r}
+
+SF_TNn_raw <- SF_Climate %>% 
+  filter(YEAR <= 2018) %>% 
+  select(YEARMONTH, TMIN) %>% 
+  mutate(YEAR = year(YEARMONTH))
+
+SF_TNn <- aggregate(TMIN ~ YEAR, data = SF_TNn_raw, min)
+
+TNn_plot <- ggplot(SF_TNn, aes(x = YEAR, y = TMIN))+
+  geom_point(color = "blue")+
+  theme_stata()+
+  xlab("Year")+
+  ylab("Temperature (F)")+
+  scale_x_continuous(breaks = seq(1945, 2020, 5), limits = c(1945, 2020))+
+  scale_y_continuous(breaks = seq(20, 45, 5), limits = c(20, 45))+
+  stat_smooth(method = "lm", col = "blue")
+
+TNn_plot
+ggsave("TNn.png")
+
+res_TNn=lm(TMIN~YEAR, data=SF_TNn)
+summary(res_TNn)
 
 ```
 
