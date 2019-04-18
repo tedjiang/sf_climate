@@ -123,5 +123,19 @@ searise_plot
 ```
 
 
+```{r}
+
+# t-test for sea level rise
+
+searise_1855 = searise_msl %>% 
+  filter(Year == "1855")
+
+searise_2018 = searise_msl %>% 
+  filter(Year == "2018")
+
+searise_ttest = t.test(searise_1855$Monthly_MSL, searise_2018$Monthly_MSL)
+searise_ttest
+
+```
 
 
